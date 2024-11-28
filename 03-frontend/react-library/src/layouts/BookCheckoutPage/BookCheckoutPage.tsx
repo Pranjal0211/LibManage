@@ -1,26 +1,29 @@
-import { useEffect, useState } from "react";
-import BookModel from "../../models/BookModel";
-import { SpinnerLoading } from "../Utils/SpinnerLoading";
+ import { useEffect, useState } from "react";
+ import BookModel from "../../models/BookModel";
+ import { SpinnerLoading } from "../Utils/SpinnerLoading";
+ import { StarsReview } from "../Utils/StarsReview";
+ import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
+// import { LatestReviews } from "./LatestReviews";
 
-export const BookCheckoutPage = () => {
+ export const BookCheckoutPage = () => {
 
-    const [book, setBook] = useState<BookModel>();
-    const [isLoading, setIsLoading] = useState(true);
-    const [httpError, setHttpError] = useState(null);
+     const [book, setBook] = useState<BookModel>();
+     const [isLoading, setIsLoading] = useState(true);
+     const [httpError, setHttpError] = useState(null);
 
-    const bookId = (window.location.pathname).split('/')[2];
+     const bookId = (window.location.pathname).split('/')[2];
 
-    useEffect(() => {
-        const fetchBook = async () => {
-            const baseUrl: string = `http://localhost:9090/api/books/${bookId}`;
+     useEffect(() => {
+         const fetchBook = async () => {
+             const baseUrl: string = `http://localhost:9090/api/books/${bookId}`;
 
-            //fetching the url data, its asynchrous so we use await, awaited and called our api from springboot
-            const response = await fetch(baseUrl);
+             //fetching the url data, its asynchrous so we use await, awaited and called our api from springboot
+             const response = await fetch(baseUrl);
 
-            //make sure the response is ok
-            if (!response.ok) {
-                throw new Error('Something went wrong!');
-            }
+             //make sure the response is ok
+             if (!response.ok) {
+                 throw new Error('Something went wrong!');
+             }
 
             //converted the response to json (await is used for asynchronous function)
             const responseJson = await response.json();
@@ -79,8 +82,11 @@ export const BookCheckoutPage = () => {
                             <h2>{book?.title}</h2>
                             <h5 className="text-primary">{book?.author}</h5>
                             <p className="lead">{book?.description}</p>
-                        </div>
-                    </div>
+                            <StarsReview rating={4} size={32} />
+                         </div>
+                     </div>
+                     <CheckoutAndReviewBox book={book} mobile={false} currentLoansCount={0} isAuthenticated={undefined} isCheckedOut={false} checkoutBook={undefined} isReviewLeft={false} submitReview={undefined}/>
+                    {/* <LatestReviews reviews={reviews} bookId={book?.id} mobile={false} /> */}
                 </div>
                 <hr/>
             </div>
@@ -98,8 +104,10 @@ export const BookCheckoutPage = () => {
                         <h2>{book?.title}</h2>
                         <h5 className="text-primary">{book?.author}</h5>
                         <p className="lead">{book?.description}</p>
+                        <StarsReview rating={4} size={32} />
                     </div>
                 </div>
+                <CheckoutAndReviewBox book={book} mobile={false} currentLoansCount={0} isAuthenticated={undefined} isCheckedOut={false} checkoutBook={undefined} isReviewLeft={false} submitReview={undefined} />
                 <hr />
             </div>
         </div>
